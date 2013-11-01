@@ -101,3 +101,5 @@ Now you can view coverage using any browser here:
 * Purge Support
 * Add FileSystem Provider
 * Add Cassandra Provider
+* Add sliding TTL support? (Possible performance impact)
+* Add per-request TTL customization? (Possible performance impact)
