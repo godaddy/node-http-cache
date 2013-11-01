@@ -1,0 +1,37 @@
+{
+  "name": "http-cache",
+  "version": "0.1.0",
+  "author": {
+    "name": "Aaron Silvas",
+    "email": "asilvas@godaddy.com"
+  },
+  "description": "An extensible caching interface for HTTP traffic.",
+  "scripts": {
+	"test": "istanbul cover ./node_modules/mocha/bin/_mocha -- --ui bdd -R spec -t 2000"
+  },
+  "dependencies": {
+    "async": ">=0.2.x",
+    "extend": ">=1.1.x"
+  },
+  "devDependencies": {
+    "mocha": "~1.12.0",
+    "istanbul": "~0.1.43",
+    "connect": ">=2.7.x",
+    "request": ">=2.21.0"
+  },
+  "repository": {
+    "type" : "git",
+	"url" : "https://github.com/godaddy/node-http-cache.git"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/godaddy/node-http-cache",
+  "bugs": {
+    "url": "https://github.com/godaddy/node-http-cache/issues"
+  },
+  "keywords": [
+    "http",
+	"REST",
+    "cache",
+    "http cache"
+  ]
+}
