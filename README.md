@@ -51,6 +51,21 @@ Real coders use no middleware? We've got you covered...
 	}).listen(8392);
 	
 	
+## HttpCache Options
+
+Options may be provided when constructing your HttpCache object...
+
+	var HttpCache = require("http-cache");
+	var httpcache = new HttpCache({ /* my options go here */ });
+	
+Options include:
+
+* ttl (default: 600) - Time (in seconds) before cache object will be purged.
+* headersToExclude (default: see code) - You may optionally manage which HTTP headers
+  are included/excluded via this object.
+* rules (default: []) - An optional set of custom caching rules. See Custom Rules.
+
+	
 ## Custom Rules
 
 Both synchronous and asynchronous rules may be provided:
@@ -98,7 +113,7 @@ Now you can view coverage using any browser here:
 
 ## TODO
 
-* Purge Support
+* Purge Support (for provider-specific checks to remove stagnant objects that were not caught by programatic TTL support)
 * Add FileSystem Provider
 * Add Cassandra Provider
 * Add sliding TTL support? (Possible performance impact)
