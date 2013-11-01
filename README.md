@@ -12,7 +12,7 @@ https://npmjs.org/package/http-cache
 
 ## What is it?
 
-
+A simple HTTP caching interface with extensible provider support.
 
  
 ## Getting Started with Connect/Express
