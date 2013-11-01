@@ -61,6 +61,8 @@ Options may be provided when constructing your HttpCache object...
 Options include:
 
 * ttl (default: 600) - Time (in seconds) before cache object will be purged.
+* provider (default: require("lib/providers/InProcProvider")) - Alternate providers may
+  be specified, including your own Custom Provider.
 * headersToExclude (default: see code) - You may optionally manage which HTTP headers
   are included/excluded via this object.
 * rules (default: []) - An optional set of custom caching rules. See Custom Rules.
@@ -94,6 +96,24 @@ Multiple rules may be provided as well... (will be processed in parallel)
 		rules: [ rule1, rule2, rule3 ]
 	});
 
+	
+## Custom Provider
+	
+Providers are intended to be very simple and extensible, so feel free to contribute
+your own providers if what is provided does not suite your needs.
+
+TODO: Add specification here
+
+
+## Available Providers
+
+If you build your own custom provider, feel free to issue a pull request so we can reference
+your provider as well.
+
+* InProcProvider - https://github.com/godaddy/node-http-cache/blob/master/lib/providers/in-proc-provider.js
+* FileSystemProvider - TODO
+* CassandraProvider - TODO
+	
 
 ## Tests & Code Coverage
 
