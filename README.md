@@ -66,6 +66,7 @@ Options include:
 * headersToExclude (default: see code) - You may optionally manage which HTTP headers
   are included/excluded via this object.
 * rules (default: []) - An optional set of custom caching rules. See Custom Rules.
+* purgeAll (default: false) - If true, will clear all cache objects from the provider.
 
 	
 ## Custom Rules

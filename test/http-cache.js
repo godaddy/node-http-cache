@@ -27,7 +27,7 @@ describe("http-cache", function() {
 					// do not cache users folder
 					return (/\/users\//i.test(req.url) === false);
 				}
-			}, ttl: 1
+			}, ttl: 1, purgeAll: true
 		};
 		server = new CacheServer(6852, HttpCache(opts), done); // do NOT call new, this is one of our tests
 		server.app.use(function(req, res) {
