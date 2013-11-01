@@ -134,8 +134,7 @@ Now you can view coverage using any browser here:
 
 ## TODO
 
-* Purge Support (for provider-specific checks to remove stagnant objects that were not caught by programatic TTL support)
-* Add FileSystem Provider
 * Add Cassandra Provider
+* Add FileSystem Provider
 * Add sliding TTL support? (Possible performance impact)
 * Add per-request TTL customization? (Possible performance impact)
