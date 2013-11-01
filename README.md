@@ -139,5 +139,4 @@ Now you can view coverage using any browser here:
 * Add sliding TTL support? (Possible performance impact)
 * Add per-request TTL customization? (Possible performance impact)
 * Add support for array based header values (part of node spec), i.e.
-
-	res.writeHead(200, { "set-cookie": [cookie1, cookie2] });
+	* res.writeHead(200, { "set-cookie": [cookie1, cookie2] });
