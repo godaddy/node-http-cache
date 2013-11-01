@@ -11,7 +11,7 @@ describe("in-proc-provider", function() {
 	var server;
 
 	before(function(done) {
-		var provider = new InProcProvider({ });
+		var provider = InProcProvider({ }); // specifically do not call new to test alternate code path
 		server = new CacheServer(6852, new HttpCache({ provider: provider }), done);
 		server.app.use(function(req, res) {
 			res.end("Caching page '" + req.url + "' at " + new Date().getTime());
@@ -41,5 +41,4 @@ describe("in-proc-provider", function() {
 			done();
 		});
 	});
-	
 });
