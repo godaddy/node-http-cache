@@ -27,7 +27,7 @@ describe("http-cache", function() {
 					// do not cache users folder
 					return (/\/users\//i.test(req.url) === false);
 				}
-			}
+			}, ttl: 1
 		};
 		server = new CacheServer(6852, HttpCache(opts), done); // do NOT call new, this is one of our tests
 		server.app.use(function(req, res) {
@@ -292,7 +292,6 @@ describe("http-cache", function() {
 		});
 	});
 
-
 	it("writeEncoding support", function(done) {
 		var xTest;
 		request.get("http://localhost:6852/writeEncoding", function(err, res, body) {
@@ -420,6 +419,32 @@ describe("http-cache", function() {
 				assert.equal(res.statusCode, 200);
 				assert.equal(body, "");
 				done();
+			});
+		});
+	});
+	
+	it("ttl support", function(done) {
+		var xTest;
+		request.get("http://localhost:6852/ttl", function(err, res, body) {
+			assert.ifError(err);
+			assert.equal(res.statusCode, 200);
+			assert.ok(res.headers["x-test"]);
+			xTest = res.headers["x-test"];
+			request.get("http://localhost:6852/ttl", function(err, res, body) {
+				assert.ifError(err);
+				assert.equal(res.statusCode, 200);
+				assert.ok(res.headers["x-test"]);
+				assert.equal(res.headers["x-test"], xTest);
+				setTimeout(function() {
+					// /ttl should be purged by now based on a ttl of 1s
+					request.get("http://localhost:6852/ttl", function(err, res, body) {
+						assert.ifError(err);
+						assert.equal(res.statusCode, 200);
+						assert.ok(res.headers["x-test"]);
+						assert.notEqual(res.headers["x-test"], xTest);
+						done();
+					});
+				}, 1500);
 			});
 		});
 	});

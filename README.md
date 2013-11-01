@@ -98,7 +98,6 @@ Now you can view coverage using any browser here:
 
 ## TODO
 
-* TTL Support
 * Purge Support
 * Add FileSystem Provider
 * Add Cassandra Provider
