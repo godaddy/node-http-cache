@@ -98,5 +98,6 @@ Now you can view coverage using any browser here:
 
 ## TODO
 
-* Store auto-gzip if body larger than a certain threshold (if not already gzipped)
-* Auto-gunzip on response if 'Accept-Encoding' header does not support gzip
+* TTL Support
+* Purge Support
+
