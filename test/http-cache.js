@@ -2,7 +2,7 @@ var
 	assert = require("assert"),
 	request = require("request"),
 	zlib = require("zlib"),
-	HttpCache = require("../index"),
+	HttpCache = require("./setup").HttpCache,
 	CacheServer = require("./cache-server")
 ;
 
@@ -27,8 +27,9 @@ describe("http-cache", function() {
 					// do not cache users folder
 					return (/\/users\//i.test(req.url) === false);
 				}
-			}, ttl: 1, purgeAll: true
+			}, ttl: 1, purgeAll: true, provider: require("./setup").provider
 		};
+
 		server = new CacheServer(6852, HttpCache(opts), done); // do NOT call new, this is one of our tests
 		server.app.use(function(req, res) {
 			switch (req.url) {
@@ -93,6 +94,26 @@ describe("http-cache", function() {
 	
 	after(function() {
 		server.close();
+	});
+	
+	var lastResponse;
+	
+	it("empty cache", function(done) {
+		request.get("http://localhost:6852/", function(err, res, body) {
+			assert.ifError(err);
+			assert.equal(res.statusCode, 200);
+			lastResponse = body;
+			done();
+		});
+	});
+	
+	it("full cache", function(done) {
+		request.get("http://localhost:6852/", function(err, res, body) {
+			assert.ifError(err);
+			assert.equal(res.statusCode, 200);
+			assert.equal(body, lastResponse);
+			done();
+		});
 	});
 	
 	it("rule-based exclusion", function(done) {

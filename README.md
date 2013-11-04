@@ -103,7 +103,8 @@ Multiple rules may be provided as well... (will be processed in parallel)
 Providers are intended to be very simple and extensible, so feel free to contribute
 your own providers if what is provided does not suite your needs.
 
-TODO: Add specification here
+See lib/providers/in-proc-provider.js to see how to create your own provider.
+
 
 
 ## Available Providers
