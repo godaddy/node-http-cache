@@ -8,10 +8,10 @@ var
 
 describe("http-cache", function() {
 
-	var server;
+	var server, cache, ops;
 
 	before(function(done) {
-		var opts = {
+		opts = {
 			rules: function(req, res, cb) {
 				if (/\/asyncRule\//.test(req.url) === true) {
 					setTimeout(function() {
@@ -30,7 +30,8 @@ describe("http-cache", function() {
 			}, ttl: 1, purgeAll: true, provider: require("./setup").provider
 		};
 
-		server = new CacheServer(6852, HttpCache(opts), done); // do NOT call new, this is one of our tests
+		cache = HttpCache(opts); // do NOT call new, this is one of our tests
+		server = new CacheServer(6852, cache, done);
 		server.app.use(function(req, res) {
 			switch (req.url) {
 				case "/writeHead":
@@ -113,6 +114,54 @@ describe("http-cache", function() {
 			assert.equal(res.statusCode, 200);
 			assert.equal(body, lastResponse);
 			done();
+		});
+	});
+	
+	it("provider.get", function(done) {
+		cache.provider.get("TEST", function(err, val) {
+			assert.ifError(err);
+			assert.ok(!val);
+			done();
+		});
+	});
+	
+	it("provider.set", function(done) {
+		cache.provider.set("TEST", "TEST", function(err) {
+			assert.ifError(err);
+			cache.provider.get("TEST", function(err, val) {
+				assert.ifError(err);
+				assert.equal(val, "TEST");
+				done();
+			});
+		});
+	});
+	
+	it("provider.remove", function(done) {
+		cache.provider.remove("TEST", function(err, val) {
+			assert.ifError(err);
+			cache.provider.get("TEST", function(err, val) {
+				assert.ifError(err);
+				assert.ok(!val);
+				done();
+			});
+		});
+	});
+	
+	it("provider.clear", function(done) {
+		cache.provider.set("TEST", "TEST", function(err) {
+			assert.ifError(err);
+			cache.provider.get("TEST", function(err, val) {
+				assert.ifError(err);
+				assert.equal(val, "TEST");
+				cache.provider.clear(function(err) {
+					assert.ifError(err);					
+					cache.provider.get("TEST", function(err, val) {
+						assert.ifError(err);
+						assert.ok(!val);
+						done();
+					});
+				});
+			});
 		});
 	});
 	
