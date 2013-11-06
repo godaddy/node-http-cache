@@ -27,7 +27,8 @@ describe("http-cache", function() {
 					// do not cache users folder
 					return (/\/users\//i.test(req.url) === false);
 				}
-			}, ttl: 1, purgeAll: true, provider: require("./setup").provider
+			}, ttl: 2, purgeAll: true, provider: require("./setup").provider
+			, confirmCacheBeforeEnd: true
 		};
 
 		cache = HttpCache(opts); // do NOT call new, this is one of our tests
@@ -96,24 +97,22 @@ describe("http-cache", function() {
 	after(function() {
 		server.close();
 	});
-	
-	var lastResponse;
-	
-	it("empty cache", function(done) {
-		request.get("http://localhost:6852/", function(err, res, body) {
+
+	it("provider.clear", function(done) {
+		cache.provider.set("TEST", "TEST", 10, function(err) {
 			assert.ifError(err);
-			assert.equal(res.statusCode, 200);
-			lastResponse = body;
-			done();
-		});
-	});
-	
-	it("full cache", function(done) {
-		request.get("http://localhost:6852/", function(err, res, body) {
-			assert.ifError(err);
-			assert.equal(res.statusCode, 200);
-			assert.equal(body, lastResponse);
-			done();
+			cache.provider.get("TEST", function(err, val) {
+				assert.ifError(err);
+				assert.equal(val, "TEST");
+				cache.provider.clear(function(err) {
+					assert.ifError(err);					
+					cache.provider.get("TEST", function(err, val) {
+						assert.ifError(err);
+						assert.ok(!val);
+						done();
+					});
+				});
+			});
 		});
 	});
 	
@@ -126,7 +125,7 @@ describe("http-cache", function() {
 	});
 	
 	it("provider.set", function(done) {
-		cache.provider.set("TEST", "TEST", function(err) {
+		cache.provider.set("TEST", "TEST", 10, function(err) {
 			assert.ifError(err);
 			cache.provider.get("TEST", function(err, val) {
 				assert.ifError(err);
@@ -146,25 +145,7 @@ describe("http-cache", function() {
 			});
 		});
 	});
-	
-	it("provider.clear", function(done) {
-		cache.provider.set("TEST", "TEST", function(err) {
-			assert.ifError(err);
-			cache.provider.get("TEST", function(err, val) {
-				assert.ifError(err);
-				assert.equal(val, "TEST");
-				cache.provider.clear(function(err) {
-					assert.ifError(err);					
-					cache.provider.get("TEST", function(err, val) {
-						assert.ifError(err);
-						assert.ok(!val);
-						done();
-					});
-				});
-			});
-		});
-	});
-	
+
 	it("rule-based exclusion", function(done) {
 		var lastResponse;
 		request.get("http://localhost:6852/users/1", function(err, res, body) {
@@ -514,7 +495,7 @@ describe("http-cache", function() {
 						assert.notEqual(res.headers["x-test"], xTest);
 						done();
 					});
-				}, 1500);
+				}, 2200);
 			});
 		});
 	});

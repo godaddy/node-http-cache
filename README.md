@@ -1,6 +1,6 @@
 # http-cache
 
-[![Build Status](https://travis-ci.org/godaddy/node-http-cache.png)](https://travis-ci.org/godaddy/node-http-cache) [![NPM version](https://badge.fury.io/js/http-cache.png)](http://badge.fury.io/js/http-cache) [![Dependency Status](https://gemnasium.com/godaddy/node-http-cache.png)](https://gemnasium.com/godaddy/node-http-cache)
+[![Build Status](https://travis-ci.org/godaddy/node-http-cache.png)](https://travis-ci.org/godaddy/node-http-cache) [![NPM version](https://badge.fury.io/js/http-cache.png)](http://badge.fury.io/js/http-cache)
 
 
 ## Install
@@ -67,6 +67,9 @@ Options include:
   are included/excluded via this object.
 * rules (default: []) - An optional set of custom caching rules. See Custom Rules.
 * purgeAll (default: false) - If true, will clear all cache objects from the provider.
+* confirmCacheBeforeEnd (default: false) - If set to true, will confirm successful
+  cache writes before ending response. Typically only used for unit tests to avoid
+  race conditions. Should not be used in a production setting.
 
 	
 ## Custom Rules
@@ -103,6 +106,16 @@ Multiple rules may be provided as well... (will be processed in parallel)
 Providers are intended to be very simple and extensible, so feel free to contribute
 your own providers if what is provided does not suite your needs.
 
+* provider.isTTLManaged - If set to true, http-cache will not be responsible for
+  purging expired entries. Reserved for distributed providers that have internal
+  support for TTL that will be more reliable.
+* provider.get(key, cb) - Returns object via callback. If no object found, null or undefined
+  should be returned, NOT an error.
+* provider.set(key, cache, cb) - Stores a JavaScript object in whatever means necessary.
+* provider.remove(key, cb) - Removes cache entry if it exists.
+* provider.clear(cb) - Purges all cache entries.
+
+
 See lib/providers/in-proc-provider.js to see how to create your own provider.
 
 
@@ -113,15 +126,15 @@ If you build your own custom provider, feel free to issue a pull request so we c
 your provider as well.
 
 * InProcProvider - https://github.com/godaddy/node-http-cache/blob/master/lib/providers/in-proc-provider.js
+* CassandraProvider - https://npmjs.org/package/http-cache-cassandra
 * FileSystemProvider - TODO
-* CassandraProvider - TODO
 	
 
 ## Tests & Code Coverage
 
 	npm test
 
-Now you can view coverage using any browser here:
+View code coverage in any browser:
 
 	coverage/lcov-report/index.html
 
@@ -135,7 +148,6 @@ Now you can view coverage using any browser here:
 
 ## TODO
 
-* Add Cassandra Provider
 * Add FileSystem Provider
 * Add sliding TTL support? (Possible performance impact)
 * Add per-request TTL customization? (Possible performance impact)

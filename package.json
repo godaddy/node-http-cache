@@ -1,13 +1,13 @@
 {
   "name": "http-cache",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "author": {
     "name": "Aaron Silvas",
     "email": "asilvas@godaddy.com"
   },
   "description": "An extensible caching interface for HTTP traffic.",
   "scripts": {
-	"test": "istanbul cover ./node_modules/mocha/bin/_mocha -- --ui bdd -R spec -t 2000"
+	"test": "istanbul cover ./node_modules/mocha/bin/_mocha -- --ui bdd -R spec -t 4000 -d"
   },
   "dependencies": {
     "async": ">=0.2.x",
