@@ -29,6 +29,8 @@ describe("http-cache", function() {
 				}
 			}, ttl: 2, purgeAll: true, provider: require("./setup").provider
 			, confirmCacheBeforeEnd: true
+			, varyByHeader: [ "magic-sprinkles" ]
+			, varyByParam: [ "missle-toe" ]
 		};
 
 		cache = HttpCache(opts); // do NOT call new, this is one of our tests
@@ -496,6 +498,74 @@ describe("http-cache", function() {
 						done();
 					});
 				}, 2200);
+			});
+		});
+	});
+
+	it("varyByHeader.found", function(done) {
+		var xTest;
+		request.get({ url: "http://localhost:6852/varyByHeader.found", headers: { "magic-sprinkles": "1" } }, function(err, res, body) {
+			assert.ifError(err);
+			assert.equal(res.statusCode, 200);
+			assert.ok(res.headers["x-test"]);			
+			xTest = res.headers["x-test"];
+			request.get({ url: "http://localhost:6852/varyByHeader.found", headers: { "magic-sprinkles": "1" } }, function(err, res, body) {
+				assert.ifError(err);
+				assert.equal(res.statusCode, 200);
+				assert.ok(res.headers["x-test"]);
+				assert.equal(res.headers["x-test"], xTest);
+				done();
+			});
+		});
+	});
+	
+	it("varyByHeader.notFound", function(done) {
+		var xTest;
+		request.get({ url: "http://localhost:6852/varyByHeader.notFound", headers: { "magic-sprinkles": "1" } }, function(err, res, body) {
+			assert.ifError(err);
+			assert.equal(res.statusCode, 200);
+			assert.ok(res.headers["x-test"]);			
+			xTest = res.headers["x-test"];
+			request.get({ url: "http://localhost:6852/varyByHeader.notFound", headers: { "magic-sprinkles": "2" } }, function(err, res, body) {
+				assert.ifError(err);
+				assert.equal(res.statusCode, 200);
+				assert.ok(res.headers["x-test"]);
+				assert.notEqual(res.headers["x-test"], xTest);
+				done();
+			});
+		});
+	});
+
+	it("varyByParam.found", function(done) {
+		var xTest;
+		request.get({ url: "http://localhost:6852/varyByParam.found?missle-toe=1", headers: { "magic-sprinkles": "1" } }, function(err, res, body) {
+			assert.ifError(err);
+			assert.equal(res.statusCode, 200);
+			assert.ok(res.headers["x-test"]);			
+			xTest = res.headers["x-test"];
+			request.get({ url: "http://localhost:6852/varyByParam.found?missle-toe=1", headers: { "magic-sprinkles": "1" } }, function(err, res, body) {
+				assert.ifError(err);
+				assert.equal(res.statusCode, 200);
+				assert.ok(res.headers["x-test"]);
+				assert.equal(res.headers["x-test"], xTest);
+				done();
+			});
+		});
+	});
+	
+	it("varyByParam.notFound", function(done) {
+		var xTest;
+		request.get({ url: "http://localhost:6852/varyByParam.notFound?missle-toe=1" }, function(err, res, body) {
+			assert.ifError(err);
+			assert.equal(res.statusCode, 200);
+			assert.ok(res.headers["x-test"]);			
+			xTest = res.headers["x-test"];
+			request.get({ url: "http://localhost:6852/varyByParam.notFound?missle-toe=2" }, function(err, res, body) {
+				assert.ifError(err);
+				assert.equal(res.statusCode, 200);
+				assert.ok(res.headers["x-test"]);
+				assert.notEqual(res.headers["x-test"], xTest);
+				done();
 			});
 		});
 	});

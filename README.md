@@ -66,7 +66,12 @@ Options include:
 * headersToExclude (default: see code) - You may optionally manage which HTTP headers
   are included/excluded via this object.
 * rules (default: []) - An optional set of custom caching rules. See Custom Rules.
+* varyByHeader (default: []) - An array of strings that will cache key by specific
+  header fields.
+* varyByParam (default: []) - An array of strings that will cache key by specific
+  querystring parameters.
 * purgeAll (default: false) - If true, will clear all cache objects from the provider.
+  Typically only useful during testing.
 * confirmCacheBeforeEnd (default: false) - If set to true, will confirm successful
   cache writes before ending response. Typically only used for unit tests to avoid
   race conditions. Should not be used in a production setting.
@@ -132,6 +137,14 @@ your provider as well.
 
 ## Tests & Code Coverage
 
+Download and install:
+
+	git clone https://github.com/godaddy/node-http-cache.git
+	cd node-http-cache
+	npm install
+
+Now test:	
+
 	npm test
 
 View code coverage in any browser:
@@ -148,6 +161,8 @@ View code coverage in any browser:
 
 ## TODO
 
+* Add varyByParam array option
+* Add varyByHeader array option
 * Add FileSystem Provider
 * Add sliding TTL support? (Possible performance impact)
 * Add per-request TTL customization? (Possible performance impact)
