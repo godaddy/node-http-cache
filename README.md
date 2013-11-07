@@ -161,8 +161,6 @@ View code coverage in any browser:
 
 ## TODO
 
-* Add varyByParam array option
-* Add varyByHeader array option
 * Add FileSystem Provider
 * Add sliding TTL support? (Possible performance impact)
 * Add per-request TTL customization? (Possible performance impact)
